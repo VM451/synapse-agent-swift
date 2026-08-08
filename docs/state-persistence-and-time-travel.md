@@ -6,7 +6,7 @@
 
 ## 1. Checkpointer Implementations
 
-### `SwiftDataCheckpointer` (Recommended for iOS 17+ / macOS 14+)
+### `SwiftDataCheckpointer` (Recommended for iOS 27+ / macOS 27+)
 Uses Apple's native SwiftData `@ModelActor` engine for persistent storage:
 ```swift
 import SwiftData

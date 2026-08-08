@@ -30,7 +30,7 @@ public protocol LLMProvider: Sendable {
 ## 2. Supported Model Providers
 
 ### 🍏 Apple Foundation Model Provider (On-Device Default)
-Direct native integration on iOS, iPadOS, macOS, and visionOS with zero-copy hardware acceleration and offline capabilities:
+Direct native integration on iOS 27+, iPadOS 27+, macOS 27+, and visionOS 27+ with zero-copy hardware acceleration and offline capabilities:
 ```swift
 let appleProvider = AppleFoundationModelProvider.default
 let response = try await appleProvider.generate(prompt: [

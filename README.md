@@ -2,13 +2,13 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Swift-6.0%20Strict%20Concurrency-orange?logo=swift&logoColor=white" alt="Swift 6.0" />
-  <img src="https://img.shields.io/badge/Platforms-iOS%2017+%20%7C%20macOS%2014+%20%7C%20visionOS%201+-blue" alt="Platforms" />
+  <img src="https://img.shields.io/badge/Platforms-iOS%2027+%20%7C%20macOS%2027+%20%7C%20iPadOS%2027+%20%7C%20visionOS%2027+-blue" alt="Platforms" />
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License" />
   <img src="https://img.shields.io/badge/Tests-23%20Passing-brightgreen" alt="Tests" />
   <img src="https://img.shields.io/badge/On--Device-100%25%20Zero--Cloud%20Ready-purple" alt="On-Device First" />
 </p>
 
-**SynapseAgent** is an open-source, high-performance, native Swift framework designed to construct stateful, multi-actor, resilient AI agents on Apple platforms (iOS, iPadOS, macOS, visionOS).
+**SynapseAgent** is an open-source, high-performance, native Swift framework designed to construct stateful, multi-actor, resilient AI agents exclusively on Apple platforms (**iOS 27.0+, iPadOS 27.0+, macOS 27.0+, visionOS 27.0+**, and newer).
 
 Inspired by the cyclic execution flow of LangGraph and the native ergonomics of SwiftAgent, SynapseAgent brings production-grade agentic orchestration into the Apple ecosystem with on-device execution, zero forced cloud dependency, first-class Apple Foundation Model integration, and a unified external provider layer (OpenAI, Anthropic, Gemini, Ollama, Mistral, Grok, Nvidia).
 
@@ -18,7 +18,7 @@ Inspired by the cyclic execution flow of LangGraph and the native ergonomics of 
 
 | Feature | LangGraph (Python / JS) | SwiftAgent (Community) | SynapseAgent (synapse-agent-swift) |
 | :--- | :--- | :--- | :--- |
-| **Target Platforms** | Server / Backend / Node.js | iOS (Basic Wrappers) | **iOS / iPadOS / macOS / visionOS (Native Apple)** |
+| **Target Platforms** | Server / Backend / Node.js | iOS (Basic Wrappers) | **iOS 27+ / iPadOS 27+ / macOS 27+ / visionOS 27+** |
 | **Type Safety** | Dynamic / Partial (Pydantic) | Typed | **Strict Compile-Time Swift 6 Type Safety** |
 | **Concurrency Safety** | Thread Locking / GIL | Partial Concurrency | **100% Data-Race Free Actor Isolation** |
 | **On-Device First** | ❌ (Cloud / Server Focus) | ⚠️ (Partial) | **✅ 100% Zero-Cloud Local Native** |

@@ -1,6 +1,6 @@
 # Getting Started with SynapseAgent
 
-`SynapseAgent` is a Swift 6 framework for building stateful, multi-actor, cyclic AI agents on Apple platforms (iOS, iPadOS, macOS, visionOS) with 100% on-device local execution and multi-provider cloud support.
+`SynapseAgent` is a Swift 6 framework for building stateful, multi-actor, cyclic AI agents exclusively on Apple platforms (**iOS 27.0+, iPadOS 27.0+, macOS 27.0+, visionOS 27.0+**, and newer) with 100% on-device local execution and multi-provider cloud support.
 
 ---
 
