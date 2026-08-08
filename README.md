@@ -14,20 +14,28 @@ Inspired by the cyclic execution flow of LangGraph and the native ergonomics of 
 
 ---
 
-## 📊 Competitive Matrix
+## 📊 Comprehensive Feature Comparison Matrix
 
-| Feature | LangGraph (Python / JS) | SwiftAgent (Community) | SynapseAgent (synapse-agent-swift) |
-| :--- | :--- | :--- | :--- |
-| **Target Platforms** | Server / Backend / Node.js | iOS (Basic Wrappers) | **iOS 27+ / iPadOS 27+ / macOS 27+ / visionOS 27+** |
-| **Type Safety** | Dynamic / Partial (Pydantic) | Typed | **Strict Compile-Time Swift 6 Type Safety** |
-| **Concurrency Safety** | Thread Locking / GIL | Partial Concurrency | **100% Data-Race Free Actor Isolation** |
-| **On-Device First** | ❌ (Cloud / Server Focus) | ⚠️ (Partial) | **✅ 100% Zero-Cloud Local Native** |
-| **Apple Models** | Python Bridge Required | Basic | **First-Class System Foundation Model Binding** |
-| **State Persistence** | Postgres / Redis / Memory | In-Memory | **SwiftData / SQLite / Checkpointing** |
-| **Time-Travel & Replay**| Server Replay | ❌ | **Native Time-Travel State Replay Engine** |
-| **Human-in-the-Loop** | Callback Endpoints | ❌ | **Native Pause / Resume Interrupt Engine** |
-| **SwiftUI Integration** | ❌ | Basic | **Native `@Observable` SwiftUI State Bindings** |
-| **Zero Heavy C/Python**| Heavy C / Python Runtime | C++ Wrapper | **Pure Native Swift Framework** |
+| Architectural Feature | SynapseAgent (Native Swift) | LangGraph (Python / JS) | Microsoft AutoGen / SK | SwiftAgent (Community) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Native Apple Platforms (iOS 27+, macOS 27+, visionOS 27+)** | ✅ | ❌ | ❌ | ❌ |
+| **100% On-Device First (Zero Forced Cloud)** | ✅ | ❌ | ❌ | ❌ |
+| **Swift 6 Strict Concurrency (Data-Race Free Actors)** | ✅ | ❌ | ❌ | ❌ |
+| **Compile-Time Type-Safe State Graphs** | ✅ | ❌ | ❌ | ❌ |
+| **First-Class Apple Foundation Model Local Bindings** | ✅ | ❌ | ❌ | ❌ |
+| **Hardware Accelerated Local Inference (Apple Silicon / Metal)** | ✅ | ❌ | ❌ | ❌ |
+| **Cyclic Graph & Loop Execution Engine** | ✅ | ✅ | ❌ | ❌ |
+| **State Persistence via SwiftData & Embedded SQLite3** | ✅ | ❌ | ❌ | ❌ |
+| **Time-Travel State Replay & Historical Forking** | ✅ | ✅ | ❌ | ❌ |
+| **Human-in-the-Loop Interrupts & Thread Resumption** | ✅ | ✅ | ❌ | ❌ |
+| **Multi-Agent Supervisor & Swarm Handoff Routing** | ✅ | ✅ | ✅ | ❌ |
+| **Dynamic Tool Dispatcher with JSON Schema Validation** | ✅ | ✅ | ✅ | ❌ |
+| **Native SwiftUI `@Observable` State & UI Components** | ✅ | ❌ | ❌ | ❌ |
+| **Universal Multi-Cloud Fallback (OpenAI, Claude, Gemini, Ollama)** | ✅ | ✅ | ✅ | ❌ |
+| **Zero-Cloud Air-Gapped Network Enforcement** | ✅ | ❌ | ❌ | ❌ |
+| **Secure Apple Keychain API Credential Management** | ✅ | ❌ | ❌ | ❌ |
+| **Pre-Flight Automatic PII Sanitizer Middleware** | ✅ | ❌ | ❌ | ❌ |
+| **Zero Heavy C / Python / Bridge Dependencies** | ✅ | ❌ | ❌ | ❌ |
 
 ---
 
