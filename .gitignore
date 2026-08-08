@@ -5,3 +5,8 @@
 *~
 .build-log.txt
 .test-log.txt
+
+# Context & Agents Protocol (Local Only)
+context/
+AGENTS.md
+agents.md
