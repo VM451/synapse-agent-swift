@@ -1,7 +1,8 @@
 import Foundation
 
 /// Ecosystem capability registrar providing one-line registration of all Synapse capabilities:
-/// SynapseMemory (Memory & Knowledge), SynapseSandbox (Execution & UI Canvas), and SynapseSearch (Web & Local Discovery).
+/// SynapseMemory (Memory & Knowledge), SynapseSandbox (Execution & UI Canvas), SynapseSearch (Web & Local Discovery),
+/// and Apple Platform Connectors (Calendar, Reminders, Notes, Contacts, Mail, Files, Maps, SystemControl, Timer).
 public extension ToolRegistry {
 
     /// Registers the standard full suite of Synapse Ecosystem capabilities.
@@ -9,11 +10,16 @@ public extension ToolRegistry {
         memoryTools: [any Tool] = [MemorySearchTool(), MemoryStoreTool(), CoreMemoryTool()],
         sandboxTools: [any Tool] = [SandboxRenderTool(), SandboxPatchTool(), SandboxInspectDOMTool()],
         searchTools: [any Tool] = [WebSearchTool(), WebContentsTool(), DeepResearchAgentTool()],
+        applePlatformTools: [any Tool] = [
+            CalendarTool(), RemindersTool(), NotesTool(), ContactsTool(),
+            MailTool(), FilesTool(), MapsTool(), SystemControlTool(), TimerTool()
+        ],
         utilityTools: [any Tool] = [CalculatorTool(), FileSystemTool(), DeviceInfoTool()]
     ) {
         for tool in memoryTools { register(tool) }
         for tool in sandboxTools { register(tool) }
         for tool in searchTools { register(tool) }
+        for tool in applePlatformTools { register(tool) }
         for tool in utilityTools { register(tool) }
     }
 
@@ -48,5 +54,20 @@ public extension ToolRegistry {
         register(searchTool)
         register(contentsTool)
         register(researchTool)
+    }
+
+    /// Registers Apple Platform tools (Calendar, Reminders, Notes, Contacts, Mail, Files, Maps, SystemControl, Timer).
+    func registerApplePlatformCapabilities(
+        services: any ApplePlatformAccessProvider = MockApplePlatformServices()
+    ) {
+        register(CalendarTool(service: services.calendar))
+        register(RemindersTool(service: services.reminders))
+        register(NotesTool(service: services.notes))
+        register(ContactsTool(service: services.contacts))
+        register(MailTool(service: services.mail))
+        register(FilesTool(service: services.files))
+        register(MapsTool(service: services.maps))
+        register(SystemControlTool(service: services.systemControl))
+        register(TimerTool(service: services.systemControl))
     }
 }
