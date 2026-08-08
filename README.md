@@ -57,6 +57,24 @@ graph TD
 
 ---
 
+## 🌌 The Synapse Ecosystem Suite
+
+SynapseAgent seamlessly orchestrates the full suite of native Apple AI frameworks:
+
+| Subsystem | Framework | Capability Provided |
+| :--- | :--- | :--- |
+| **🧠 Memory** | [`synapse-memory-swift`](https://github.com/VM451/synapse-memory-swift) | Bi-temporal Knowledge Graphs, SIMD Vector Search, Working Core Memory, CloudKit Sync |
+| **🧪 Sandbox** | [`synapse-sandbox-swift`](https://github.com/VM451/synapse-sandbox-swift) | Zero-trust WebKit/WASM Engine, Token-Optimized Semantic DOM Dumps, Sub-ms Code Patching |
+| **🔍 Search** | [`synapse-search-swift`](https://github.com/VM451/synapse-search-swift) | 100% On-Device Stealth Search, JS Web Scraping, AFM Structured Data Extraction |
+
+Register all ecosystem capabilities in one line:
+```swift
+let registry = ToolRegistry()
+registry.registerAllEcosystemCapabilities()
+```
+
+---
+
 ## ⚡ 30-Second Quickstart
 
 ```swift
@@ -92,6 +110,7 @@ print(finalState.response)
 
 For granular guides and comprehensive API references, see the **[`docs/`](docs/)** directory:
 
+- 🌌 **[Ecosystem Integration Guide](docs/synapse-ecosystem-integration.md)**: Unifying SynapseAgent with Memory, Sandbox, and Search.
 - 🚀 **[Getting Started & Installation](docs/getting-started.md)**: Setup, SPM integration, and lifecycle streaming.
 - 🏛 **[Architecture & Design](docs/architecture-and-design.md)**: Swift 6 strict concurrency, actor isolation, and cyclic data flow.
 - 🔄 **[Core Graph Engine & State Reducers](docs/core-graph-engine.md)**: Nodes, direct edges, conditional routing, branching, and state reducers.
