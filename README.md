@@ -8,23 +8,30 @@
   <img src="https://img.shields.io/badge/On--Device-100%25%20Zero--Cloud%20Ready-purple" alt="On-Device First" />
 </p>
 
-**synapse-agent-swift** (`SynapseAgent`) is a high-performance, native Swift framework designed to construct stateful, multi-actor, resilient AI agents on Apple platforms (iOS, iPadOS, macOS, visionOS).
+**SynapseAgent** is an open-source, high-performance, native Swift framework designed to construct stateful, multi-actor, resilient AI agents on Apple platforms (iOS, iPadOS, macOS, visionOS).
 
-Inspired by the cyclic execution flow of LangGraph and the native ergonomics of SwiftAgent, SynapseAgent brings production-grade agentic orchestration into the Apple ecosystem. It prioritizes on-device execution, zero forced cloud dependency, and first-class integration with Apple Foundation Models, while maintaining a unified adapter layer for external cloud providers (OpenAI, Anthropic, Google Gemini, Ollama, Mistral, Grok, Nvidia).
-
----
-
-## 🌟 Core Principles
-
-1. **100% On-Device First**: Core state graphs, persistence engines, tool dispatchers, and memory operate locally without mandatory external servers.
-2. **First-Class Apple Foundation Model Integration**: Zero-friction bindings for local Apple Foundation Models with hardware acceleration.
-3. **Resilience & Fault Tolerance**: Native support for cyclic workflows, retries, fallback routing, human-in-the-loop interrupts, and checkpoint state restoration.
-4. **Swift 6 Strict Concurrency & Safety**: 100% data-race free actor-isolated state machine, `@Sendable` state snapshots, and compile-time schema validation.
-5. **Zero Heavy C/Python Dependencies**: Pure Swift built entirely with Apple framework primitives (Foundation, SwiftData, SQLite3, Metal, NaturalLanguage, Combine, Observation).
+Inspired by the cyclic execution flow of LangGraph and the native ergonomics of SwiftAgent, SynapseAgent brings production-grade agentic orchestration into the Apple ecosystem with on-device execution, zero forced cloud dependency, first-class Apple Foundation Model integration, and a unified external provider layer (OpenAI, Anthropic, Gemini, Ollama, Mistral, Grok, Nvidia).
 
 ---
 
-## 🏗 System Architecture
+## 📊 Competitive Matrix
+
+| Feature | LangGraph (Python / JS) | SwiftAgent (Community) | SynapseAgent (synapse-agent-swift) |
+| :--- | :--- | :--- | :--- |
+| **Target Platforms** | Server / Backend / Node.js | iOS (Basic Wrappers) | **iOS / iPadOS / macOS / visionOS (Native Apple)** |
+| **Type Safety** | Dynamic / Partial (Pydantic) | Typed | **Strict Compile-Time Swift 6 Type Safety** |
+| **Concurrency Safety** | Thread Locking / GIL | Partial Concurrency | **100% Data-Race Free Actor Isolation** |
+| **On-Device First** | ❌ (Cloud / Server Focus) | ⚠️ (Partial) | **✅ 100% Zero-Cloud Local Native** |
+| **Apple Models** | Python Bridge Required | Basic | **First-Class System Foundation Model Binding** |
+| **State Persistence** | Postgres / Redis / Memory | In-Memory | **SwiftData / SQLite / Checkpointing** |
+| **Time-Travel & Replay**| Server Replay | ❌ | **Native Time-Travel State Replay Engine** |
+| **Human-in-the-Loop** | Callback Endpoints | ❌ | **Native Pause / Resume Interrupt Engine** |
+| **SwiftUI Integration** | ❌ | Basic | **Native `@Observable` SwiftUI State Bindings** |
+| **Zero Heavy C/Python**| Heavy C / Python Runtime | C++ Wrapper | **Pure Native Swift Framework** |
+
+---
+
+## 🏗 Architectural Overview
 
 ```mermaid
 graph TD
@@ -42,124 +49,57 @@ graph TD
 
 ---
 
-## 🚀 Quick Start
+## ⚡ 30-Second Quickstart
 
-### 1. Define Agent State
 ```swift
 import SynapseAgent
 
-struct CodeAssistantState: AgentState {
-    var messages: [ChatMessage] = []
-    var draftCode: String = ""
-    var executionResult: String?
-    var isApproved: Bool = false
+// 1. Define State
+struct AssistantState: AgentState {
+    var query: String = ""
+    var response: String = ""
 }
-```
 
-### 2. Build the Cyclic Graph
-```swift
-let builder = GraphBuilder<CodeAssistantState>()
-
-// Node 1: Code Generator (Apple Foundation Model or Cloud)
-builder.addNode("generator") { state in
+// 2. Build Cyclic Graph
+let builder = GraphBuilder<AssistantState>()
+builder.addNode("think") { state in
     let provider = AppleFoundationModelProvider.default
-    let response = try await provider.generate(prompt: state.messages)
-    var nextState = state
-    nextState.draftCode = response.text
-    nextState.messages.append(.assistant(response.text))
-    return nextState
+    let res = try await provider.generate(prompt: [.user(state.query)])
+    var updated = state
+    updated.response = res.text
+    return updated
 }
+builder.setEntryPoint("think")
+builder.addEdge(from: "think", to: EndNode.id)
 
-// Node 2: Local Verifier & Static Analysis
-builder.addNode("verifier") { state in
-    var nextState = state
-    nextState.executionResult = state.draftCode.contains("func") ? "SUCCESS" : "RETRY"
-    return nextState
-}
-
-// Node 3: Human-in-the-Loop Interrupt
-builder.addNode("humanReview") { (state: CodeAssistantState) in
-    throw GraphInterrupt.approvalRequired(message: "Approve generated code execution?")
-}
-
-// Define Transitions
-builder.setEntryPoint("generator")
-builder.addEdge(from: "generator", to: "verifier")
-
-// Cyclic Conditional Edge
-builder.addConditionalEdge(from: "verifier") { state in
-    state.executionResult == "SUCCESS" ? "humanReview" : "generator"
-}
-builder.addEdge(from: "humanReview", to: EndNode.id)
-
-// Compile with SQLite Checkpointing
-let checkpointer = SQLiteCheckpointer()
-let graph = builder.compile(checkpointer: checkpointer)
-```
-
-### 3. Execute & Stream Events
-```swift
-// Synchronous invocation
-let finalState = try await graph.invoke(initialState: CodeAssistantState())
-
-// Or stream real-time lifecycle events
-for try await event in graph.stream(initialState: CodeAssistantState()) {
-    switch event {
-    case .nodeStarted(let id, _, let step):
-        print("▶ Running node \(id) at step \(step)")
-    case .nodeCompleted(let id, _, let duration, _):
-        print("✔ Finished node \(id) in \(duration)s")
-    case .interrupted(let interrupt, _, _):
-        print("⚠️ Human approval required: \(interrupt.message)")
-    case .completed(let state, let totalSteps):
-        print("🎉 Agent finished in \(totalSteps) steps!")
-    default:
-        break
-    }
-}
+// 3. Compile & Run with SQLite Checkpointer
+let graph = builder.compile(checkpointer: SQLiteCheckpointer())
+let finalState = try await graph.invoke(initialState: AssistantState(query: "Hello on-device AI!"))
+print(finalState.response)
 ```
 
 ---
 
-## 🛡 Security & Privacy Guardrails
+## 📖 In-Depth Documentation
 
-Enforce zero external network egress with a single flag:
-```swift
-// Blocks all external HTTP/WebSocket network calls
-ZeroCloudMode.isEnabled = true
-```
+For granular guides and comprehensive API references, see the **[`docs/`](docs/)** directory:
 
-Secure Keychain Storage for API credentials:
-```swift
-let keychain = KeychainStorage(service: "com.myapp.ai.keys")
-try keychain.save(key: "OPENAI_API_KEY", value: "sk-...")
-```
-
-PII Sanitization Middleware:
-```swift
-let cleanPrompt = PIISanitizer.sanitize(text: userPrompt)
-```
-
----
-
-## 📦 Supported Providers
-
-| Provider | Supported Models | Streaming | Tool Calling | Offline |
-| :--- | :--- | :---: | :---: | :---: |
-| **Apple Foundation Model** | Native Apple On-Device Models | ✅ | ✅ | ✅ |
-| **OpenAI** | GPT-4o, o1, o3-mini, GPT-4o-mini | ✅ | ✅ | ❌ |
-| **Anthropic** | Claude 3.5 Sonnet, Haiku, Opus | ✅ | ✅ | ❌ |
-| **Google Gemini** | Gemini 1.5 Pro, Flash, Gemini 2.0 Flash | ✅ | ✅ | ❌ |
-| **Ollama / Local Llama** | Llama 3.3, DeepSeek-R1, Mistral GGUF | ✅ | ✅ | ✅ |
-| **Mistral AI** | Mistral Large, Codestral, Pixtral | ✅ | ✅ | ❌ |
-| **xAI Grok** | Grok-2, Grok-beta | ✅ | ✅ | ❌ |
-| **NVIDIA NIM** | TensorRT-LLM Microservices | ✅ | ✅ | ❌ |
+- 🚀 **[Getting Started & Installation](docs/getting-started.md)**: Setup, SPM integration, and lifecycle streaming.
+- 🏛 **[Architecture & Design](docs/architecture-and-design.md)**: Swift 6 strict concurrency, actor isolation, and cyclic data flow.
+- 🔄 **[Core Graph Engine & State Reducers](docs/core-graph-engine.md)**: Nodes, direct edges, conditional routing, branching, and state reducers.
+- 🤖 **[Providers & Foundation Models](docs/providers-and-models.md)**: Apple Foundation Models, OpenAI, Anthropic, Gemini, Ollama, Mistral, Grok, Nvidia NIM.
+- 💾 **[State Persistence & Time Travel](docs/state-persistence-and-time-travel.md)**: SwiftData, SQLite, InMemory checkpointers, state inspection, and thread forking.
+- 🛑 **[Human-in-the-Loop & Interrupts](docs/human-in-the-loop-and-interrupts.md)**: Safe action pausing, approval banners, and thread resumption.
+- 🤝 **[Multi-Agent Orchestration](docs/multi-agent-orchestration.md)**: Subgraph nesting, supervisor routing, swarm handoffs, and parallel task groups.
+- 🛠 **[Tools & Dynamic Tool Dispatcher](docs/tools-and-dispatcher.md)**: Tool definitions, JSON schemas, calculator, filesystem, and telemetry tools.
+- 🛡 **[Security & Privacy Guardrails](docs/security-and-privacy.md)**: Zero-cloud mode, Keychain credential management, and PII sanitization.
+- 📱 **[SwiftUI Native Integration](docs/swiftui-integration.md)**: `@Observable` `AgentViewModel`, chat interfaces, approval banners, and timeline scrubbers.
 
 ---
 
 ## 🧪 Testing
 
-SynapseAgent is built with Swift Testing (`import Testing`, `@Suite`, `@Test`, `#expect`):
+SynapseAgent features a test suite with 100% data-race free Swift 6 strict concurrency verification:
 
 ```bash
 swift test --disable-sandbox
@@ -169,4 +109,4 @@ swift test --disable-sandbox
 
 ## 📄 License
 
-MIT License. Designed with ❤️ for the Apple Developer & AI community.
+MIT License. Built with ❤️ for the Apple AI Developer community.
