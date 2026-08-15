@@ -7,11 +7,11 @@ import CompilerPluginSupport
 let package = Package(
     name: "SynapseAgent",
     platforms: [
-        .iOS("27.0"),
-        .macOS("27.0"),
-        .tvOS("27.0"),
-        .watchOS("27.0"),
-        .visionOS("27.0")
+        .iOS(.v17),
+        .macOS(.v14),
+        .tvOS(.v17),
+        .watchOS(.v10),
+        .visionOS(.v1)
     ],
     products: [
         .library(
